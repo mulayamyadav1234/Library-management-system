@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}{% if book %}Edit Book{% else %}Add Book{% endif %} - Library Management System{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:center;padding:40px;">
+    <div style="width:100%;max-width:450px;background:white;padding:30px;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,0.12);">
+        <h2 style="text-align:center;color:#2c3e50;">{% if book %}✏️ Edit Book{% else %}📚 Add New Book{% endif %}</h2>
+
+        {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
+
+        <form method="POST">
+            <label style="font-weight:600;">Book Name:</label>
+            <input type="text" name="book_name" value="{{ book.get('book_name', '') if book else '' }}" required
+                   style="width:100%;padding:10px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box;">
+
+            <label style="font-weight:600;">Author:</label>
+            <input type="text" name="author" value="{{ book.get('author', '') if book else '' }}" required
+                   style="width:100%;padding:10px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box;">
+
+            <label style="font-weight:600;">Quantity:</label>
+            <input type="number" name="quantity" value="{{ book.get('quantity', '') if book else '' }}" min="0" required
+                   style="width:100%;padding:10px;margin-bottom:16px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box;">
+
+            <button type="submit" style="width:100%;padding:12px;background:#23de6e;color:white;border:none;border-radius:8px;font-weight:600;">
+                {% if book %}Save Changes{% else %}Add Book{% endif %}
+            </button>
+        </form>
+
+        <p style="text-align:center;margin-top:20px;">
+            <a href="{{ url_for('books.book_list') }}"><h6> Back to Book List</h6></a>
+        </p>
+    </div>
+</div>
+{% endblock %}

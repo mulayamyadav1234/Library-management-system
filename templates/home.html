@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Library Management System{% endblock %}
+
+{% block content %}
+<div style="padding:30px;">
+    <h2 style="color:#2c3e50;margin-bottom:24px;">📚 Library Overview</h2>
+
+    <!-- Summary cards -->
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:32px;">
+        <div style="flex:1;min-width:180px;background:#198754;color:white;padding:20px;border-radius:12px;">
+            <h3 style="margin:0;font-size:28px;">{{ total_books }}</h3>
+            <p style="margin:4px 0 0;">Total Books</p>
+        </div>
+
+        <div style="flex:1;min-width:180px;background:#dc3545;color:white;padding:20px;border-radius:12px;">
+            <h3 style="margin:0;font-size:28px;">{{ issued_books }}</h3>
+            <p style="margin:4px 0 0;">Issued Books</p>
+        </div>
+
+        <div style="flex:1;min-width:180px;background:#0d6efd;color:white;padding:20px;border-radius:12px;">
+            <h3 style="margin:0;font-size:28px;">{{ remaining_books }}</h3>
+            <p style="margin:4px 0 0;">Available Books</p>
+        </div>
+
+        <div style="flex:1;min-width:180px;background:#6f42c1;color:white;padding:20px;border-radius:12px;">
+            <h3 style="margin:0;font-size:28px;">{{ total_students }}</h3>
+            <p style="margin:4px 0 0;">Total Students</p>
+        </div>
+    </div>
+
+    <!-- totalstudents and books which are recently added -->
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+
+        <div style="flex:1;min-width:300px;background:white;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08);padding:20px;">
+            <h3 style="margin-top:0;color:#2c3e50;">🧑‍🎓 New Students</h3>
+            <table style="width:100%;border-collapse:collapse;">
+                <tr style="border-bottom:2px solid #eee;text-align:left;">
+                    <th style="padding:8px;">Name</th>
+                    <th style="padding:8px;">Department</th>
+                </tr>
+                {% for student in recent_students %}
+                <tr style="border-bottom:1px solid #f0f0f0;">
+                    <td style="padding:8px;">{{ student.get('student_name', '') }}</td>
+                    <td style="padding:8px;">{{ student.get('department', '') }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="2" style="padding:8px;color:#888;">No New students Registation....</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div style="flex:1;min-width:300px;background:white;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08);padding:20px;">
+            <h3 style="margin-top:0;color:#2c3e50;">📚 Latest Books</h3>
+            <table style="width:100%;border-collapse:collapse;">
+                <tr style="border-bottom:2px solid #eee;text-align:left;">
+                    <th style="padding:8px;">Title</th>
+                    <th style="padding:8px;">Author</th>
+                </tr>
+                {% for book in recent_books %}
+                <tr style="border-bottom:1px solid #f0f0f0;">
+                    <td style="padding:8px;">{{ book.get('book_name', '') }}</td>
+                    <td style="padding:8px;">{{ book.get('author', '') }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="2" style="padding:8px;color:#888;">No books added recently.</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+                            

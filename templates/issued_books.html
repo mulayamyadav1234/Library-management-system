@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Issued Books - Library Management System{% endblock %}
+{% block content %}
+<div style="padding:30px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h2 style="color:#2c3e50;margin:0;">📖 Issued Books</h2>
+    </div>
+
+    <div style="background:white;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,0.12);overflow:hidden;">
+        {% if records %}
+        <table style="width:100%;border-collapse:collapse;">
+            <thead>
+                <tr style="background:#2c3e50;color:white;text-align:left;">
+                    <th style="padding:12px;">Book</th>
+                    <th style="padding:12px;">Student</th>
+                    <th style="padding:12px;">Issue Date</th>
+                    <th style="padding:12px;">Due Date</th>
+                    <th style="padding:12px;">Return Date</th>
+                    <th style="padding:12px;">Fine</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr style="border-bottom:1px solid #f0f0f0;">
+                    <td style="padding:12px;">{{ record.get('book_name', '') }}</td>
+                    <td style="padding:12px;">{{ record.get('student_email', '') }}</td>
+                    <td style="padding:12px;">{{ record.get('issue_date', '') }}</td>
+                    <td style="padding:12px;">{{ record.get('due_date', '') }}</td>
+                    <td style="padding:12px;">{{ record.get('return_date', '') or 'Not Returned' }}</td>
+                    <td style="padding:12px;">₹{{ record.get('fine_amount', 0) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="padding:20px;color:#6c757d;">No issued book records found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

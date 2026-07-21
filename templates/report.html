@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Student Report - Library Management System{% endblock %}
+{% block content %}
+<div style="padding:30px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h2 style="margin:0;color:#2c3e50;">📄 Student Report</h2>
+    </div>
+
+    <form method="POST" action="{{ url_for('report.student_report') }}" style="margin-bottom:20px;display:flex;gap:10px;flex-wrap:wrap;">
+        <input type="text" name="student_name" value="{{ report_query|default('') }}" placeholder="Enter student name"
+               style="flex:1;min-width:260px;padding:10px 12px;border:1px solid #ccc;border-radius:8px;">
+        <button type="submit" style="padding:10px 16px;background:#31d237;color:white;border:none;border-radius:8px;font-weight:600;">Generate Report</button>
+    </form>
+
+    {% if report_student %}
+    <div style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:16px;padding:20px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+        <h3 style="margin-top:0;color:#2c3e50;">Student Details</h3>
+        <p style="margin:6px 0;"><strong>Name:</strong> {{ report_student.get('student_name', '') }}</p>
+        <p style="margin:6px 0;"><strong>Registration Date:</strong> {{ report_student.get('registration_date') or 'Not available' }}</p>
+        <p style="margin:6px 0;"><strong>Email:</strong> {{ report_student.get('email', '') }}</p>
+        <p style="margin:6px 0;"><strong>Department:</strong> {{ report_student.get('department', '') }}</p>
+
+        {% if report_records %}
+        <h4 style="margin:16px 0 8px;color:#2c3e50;">Issued Books</h4>
+        <table style="width:100%;border-collapse:collapse;background:white;">
+            <thead>
+                <tr style="background:#2c3e50;color:white;text-align:left;">
+                    <th style="padding:10px;">Book Name</th>
+                    <th style="padding:10px;">Issue Date</th>
+                    <th style="padding:10px;">Due Date</th>
+                    <th style="padding:10px;">Return Date</th>
+                    <th style="padding:10px;">Fine</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in report_records %}
+                <tr style="border-bottom:1px solid #f0f0f0;">
+                    <td style="padding:10px;">{{ record.book_name }}</td>
+                    <td style="padding:10px;">{{ record.issue_date }}</td>
+                    <td style="padding:10px;">{{ record.due_date }}</td>
+                    <td style="padding:10px;">{{ record.return_date or 'Not returned' }}</td>
+                    <td style="padding:10px;">{% if record.overdue %}<span style="color:#dc3545;font-weight:600;">₹{{ record.fine_amount }}</span>{% else %}₹{{ record.fine_amount }}{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="color:#6c757d;margin-top:10px;">No issued books found for this student.</p>
+        {% endif %}
+    </div>
+    {% elif report_query %}
+    <div style="background:#fff3cd;border:1px solid #ffeeba;border-radius:12px;padding:14px;color:#856404;">
+        No report found for "{{ report_query }}".
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

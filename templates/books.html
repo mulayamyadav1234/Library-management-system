@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Books - Library Management System{% endblock %}
+{% block content %}
+<div style="padding:30px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h2 style="color:#2c3e50;">📚 Book Management</h2>
+        <a href="{{ url_for('books.add_book') }}" style="background:#198754;color:white;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:600;">+ Add Book</a>
+    </div>
+
+    <form method="GET" action="{{ url_for('books.book_list') }}" style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;">
+        <input type="text" name="q" value="{{ search_query|default('') }}" placeholder="Search book by name"
+               style="flex:1;min-width:240px;padding:10px 12px;border:1px solid #ccc;border-radius:8px;">
+        <button type="submit" style="padding:10px 16px;background:#1bcd41;color:white;border:none;border-radius:8px;font-weight:600;">Search</button>
+        {% if search_query %}
+        <a href="{{ url_for('books.book_list') }}" style="padding:10px 16px;background:#6c757d;color:white;border-radius:8px;text-decoration:none;font-weight:600;">Clear</a>
+        {% endif %}
+    </form>
+
+    <table style="width:100%;border-collapse:collapse;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+        <tr style="background:#2c3e50;color:white;text-align:left;">
+            <th style="padding:12px;">Book Name</th>
+            <th style="padding:12px;">Author</th>
+            <th style="padding:12px;">Quantity</th>
+            <th style="padding:12px;">Status</th>
+            <th style="padding:12px;">Actions</th>
+        </tr>
+        {% for book in books %}
+        <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:12px;">{{ book.get('book_name', '') }}</td>
+            <td style="padding:12px;">{{ book.get('author', '') }}</td>
+            <td style="padding:12px;">{{ book.get('quantity', 0) }}</td>
+            <td style="padding:12px;">
+                {% if book.get('quantity', 0) > 0 %}
+                    <span style="color:white;background:#198754;padding:4px 10px;border-radius:6px;font-size:13px;">Available</span>
+                {% else %}
+                    <span style="color:white;background:#dc3545;padding:4px 10px;border-radius:6px;font-size:13px;">Issued</span>
+                {% endif %}
+            </td>
+            <td style="padding:12px;">
+                <a href="{{ url_for('books.edit_book', book_id=book.get('book_id')) }}" style="color:#0d6efd;margin-right:10px;">Edit</a>
+                <a href="{{ url_for('books.delete_book', book_id=book.get('book_id')) }}" style="color:#dc3545;margin-right:10px;" onclick="return confirm('Delete this book?');">Delete</a>
+                {% if book.get('quantity', 0) > 0 %}
+                    <a href="{{ url_for('books.issue_book', book_id=book.get('book_id')) }}" style="color:#6f42c1;">Mark Issued</a>
+                {% else %}
+                    <a href="{{ url_for('books.return_book', book_id=book.get('book_id')) }}" style="color:#fd7e14;">Mark Returned</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="padding:12px;color:#888;">{% if search_query %}No books found for "{{ search_query }}".{% else %}No books added yet.{% endif %}</td></tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
